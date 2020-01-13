@@ -75,6 +75,7 @@ dtm <- DocumentTermMatrix(docs,
                                          removeNumbers = TRUE,
                                          removePunctuation = TRUE,
                                          stemming=TRUE))
+View(dtm)
 
 # One common pre-processing step that some applicaitons may call for is applying tf-idf weights. The [tf-idf](https://en.wikipedia.org/wiki/Tf%E2%80%93idf), or term frequency-inverse document frequency, is a weight that ranks the importance of a term in its contextual document corpus. The tf-idf value increases proportionally to the number of times a word appears in the document, but is offset by the frequency of the word in the corpus, which helps to adjust for the fact that some words appear more frequently in general. In other words, it places importance on terms frequent in the document but rare in the corpus.
 
@@ -88,6 +89,7 @@ dtm.weighted <- DocumentTermMatrix(docs,
 
 # Compare first 5 rows and 5 columns of the `dtm` and `dtm.weighted`. What do you notice?
 inspect(dtm[1:5,1:5])
+inspect(dtm[10:50,80:90])
 inspect(dtm.weighted[1:5,1:5])
 
 # Let's look at the structure of our DTM. Print the dimensions of the DTM. How many documents do we have? How many terms?
@@ -103,9 +105,9 @@ length(freq)
 # By ordering the frequencies we can list the most frequent terms and the least frequent terms.
 # order
 sorted <- sort(freq, decreasing = T)
-# Least frequent terms
-head(sorted)
-# most frequent
+# Most frequent terms
+head(sorted,20)
+# Least frequent
 tail(sorted)
 
 # Let's make a plot that shows the frequency of frequencies for the terms. (For example, how many words are used only once? 5 times? 10 times?)
