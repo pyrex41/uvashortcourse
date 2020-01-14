@@ -4,7 +4,7 @@
 
 # Download and install the following packages to get started:
   
-setwd('~/Dropbox/cope-crabtree/text analysis course/materials_extended/')
+#setwd('~/Dropbox/cope-crabtree/text analysis course/materials_extended/')
 rm(list=ls())
 require(tm)
 require(matrixStats) # for statistics
@@ -71,9 +71,13 @@ models %>% # plot regression output
 
 data.corpus.inaugural.subset <- # subset corpus to post-1949 speeches
   corpus_subset(data_corpus_inaugural, Year > 1949)
+head(data.corpus.inaugural.subset)
 
 token.info <- summary(data.corpus.inaugural.subset) # examine tokens
 plot(token.info$Year, token.info$Tokens, type = 'l')
+
+token.i2 <- summary(data_corpus_inaugural)
+plot(token.i2$Year, token.i2$Tokens, type='l')
 
 inaug.dfm <- dfm(data.corpus.inaugural.subset) # convert to dfm
 textplot_wordcloud(inaug.dfm) # create word cloud
@@ -87,6 +91,11 @@ textplot_xray( # create multiple lexicon dispersion plots
   kwic(data.corpus.inaugural.subset, pattern = "freedom")
 )
 
+textplot_xray( # create multiple lexicon dispersion plots
+  kwic(data_corpus_inaugural, pattern = "american"),
+  kwic(data_corpus_inaugural, pattern = "people"),
+  kwic(data_corpus_inaugural, pattern = "freedom")
+)
 ## 2. Measuring "distinctiveness"
 
 # Oftentimes scholars will want to compare different corpora by finding the words (or features) distinctive to each corpora. But finding distinctive words requires a decision about what “distinctive” means. As we will see, there are a variety of definitions that we might use. 
