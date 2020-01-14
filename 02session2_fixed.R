@@ -4,7 +4,7 @@
 
 # Download and install the following packages to get started:
 
-setwd('~/Dropbox/cope-crabtree/text analysis course/materials_extended/')
+#setwd('~/Dropbox/cope-crabtree/text analysis course/materials_extended/')
 #setwd("~/Dropbox/Shared_Folders/cope-crabtree/text analysis course/materials_extended")
 rm(list=ls())
 require(tm)
