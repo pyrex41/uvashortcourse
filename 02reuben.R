@@ -4,7 +4,15 @@
 
 # Download and install the following packages to get started:
 
+<<<<<<< HEAD:02session2_fixed.R
 #setwd('~/Dropbox/cope-crabtree/text analysis course/materials_extended/')
+=======
+<<<<<<< HEAD
+#setwd('~/Dropbox/cope-crabtree/text analysis course/materials_extended/')
+=======
+setwd('~/Dropbox/cope-crabtree/text analysis course/materials_extended/')
+>>>>>>> upstream/master
+>>>>>>> a38405df4ca36b17940a5e7c93de221a136954da:02fixed_reuben.R
 #setwd("~/Dropbox/Shared_Folders/cope-crabtree/text analysis course/materials_extended")
 rm(list=ls())
 require(tm)
