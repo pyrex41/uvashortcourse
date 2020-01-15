@@ -3,9 +3,8 @@
 ## 1.1 
 
 # Download and install the following packages to get started:
-
-#setwd('~/Dropbox/cope-crabtree/text analysis course/materials_extended/')
-#setwd("~/Dropbox/Shared_Folders/cope-crabtree/text analysis course/materials_extended")
+  
+setwd('~/Dropbox/cope-crabtree/text analysis course/materials_extended/')
 rm(list=ls())
 require(tm)
 require(matrixStats) # for statistics
@@ -21,13 +20,10 @@ library(quanteda)
 library(tidytext)
 library(tidyr)
 library(dplyr)
-install.packages("dplyr")
 data("data_corpus_inaugural")
 
 inaug.td <- tidy(data_corpus_inaugural) # tidy text the corpus
 inaug.td
-summary(inaug.td)
-head(inaug.td$text)
 
 inaug.words <- inaug.td %>% # convert the corpus to document-word
   unnest_tokens(word, text) %>%
@@ -44,7 +40,6 @@ inaug.freq <- inaug.words %>% # check how word use changes over time
   ungroup()
 
 inaug.freq
-tail(inaug.freq)
 
 library(broom) # regress year on each word
 models <- inaug.freq %>%
@@ -76,7 +71,6 @@ models %>% # plot regression output
 
 data.corpus.inaugural.subset <- # subset corpus to post-1949 speeches
   corpus_subset(data_corpus_inaugural, Year > 1949)
-head(data.corpus.inaugural.subset)
 
 token.info <- summary(data.corpus.inaugural.subset) # examine tokens
 plot(token.info$Year, token.info$Tokens, type = 'l')
@@ -103,7 +97,6 @@ textplot_xray( # create multiple lexicon dispersion plots
 
 # import corpus
 docs <- Corpus(DirSource("sotu"))
-docs
 # preprocess and create DTM
 dtm <- DocumentTermMatrix(docs,
                           control = list(tolower = TRUE,
@@ -133,9 +126,7 @@ everyone.else <- dtm.m[-obama.index,]
 dim(everyone.else)
 # Sum word usage counts across all texts
 obama <- colSums(obama)
-head(obama)
 everyone.else <- colSums(everyone.else)
-head(everyone.else)
 # Put those sums back into a dataframe
 df <- data.frame(rbind(obama, everyone.else))
 df[,1:5]
@@ -166,9 +157,9 @@ diffFreq <- obama - everyone.else
 # sort the words
 diffFreq <- sort(diffFreq, decreasing = T)
 # the top obama words
-head(diffFreq, 20)
-# the top eveyoneelse words
-tail(diffFreq, 20)
+head(diffFreq, 10)
+# the top trump words
+tail(diffFreq, 10)
 
 ### 2.4 Differences in averages
 
@@ -192,8 +183,8 @@ means.everyoneelse <- df[2,]
 score <- unlist(means.obama - means.everyoneelse)
 # find words with highest difference
 score <- sort(score, decreasing = T)
-head(score,30) # top obama words
-tail(score,30) # top words for everyone else
+head(score,10) # top obama words
+tail(score,10) # top words for everyone else
 
 # This is a start. The problem with this measure is that it tends to highlight differences in very frequent words. For example, this method gives greater attention to a word that occurs 30 times per 1,000 words in Obama and 25 times per 1,000 in Trump than it does to a word that occurs 5 times per 1,000 words in Obama and 0.1 times per 1,000 words in Trump. This does not seem right. It seems important to recognize cases when one author uses a word frequently and another author barely uses it.
 
@@ -208,6 +199,6 @@ means.all <- colMeans(df)
 # now divide the difference in authors' rates by the average rate across all authors
 score <- unlist((means.obama - means.everyoneelse) / means.all)
 score <- sort(score, decreasing = T)
-head(score,30) # top obama words
-tail(score,30) # top words for everyone else
+head(score,10) # top obama words
+tail(score,10) # top words for everyone else
 
