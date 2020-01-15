@@ -16,6 +16,7 @@ library(quanteda)
 library(tidyr)
 library(dplyr)
 library(ggplot2)
+library(textdata)
 data("data_corpus_inaugural")
 
 ##########################
@@ -114,4 +115,14 @@ inaug.words.five <- inaug.td %>%
 inaug.words.five
 
 # Now make this plot for bigrams. Hint: check ?unnest_tokens.
-
+inaug.words.two <- inaug.td %>%
+  tidytext::unnest_tokens(two_gram, text, token = "ngrams", n = 2) %>%
+  count(two_gram, sort = TRUE) %>%
+  top_n(20) %>%
+  mutate(two_gram = reorder(two_gram, n)) %>%
+  ggplot(aes(two_gram, n)) +
+  geom_col(fill = "red", show.legend = FALSE) +
+  xlab(NULL) +
+  ylab(NULL) +
+  coord_flip()
+inaug.words.two
