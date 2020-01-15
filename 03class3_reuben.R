@@ -15,6 +15,7 @@ library(tidytext) # Sentiment dictionaries
 library(quanteda)
 library(tidyr)
 library(dplyr)
+library(ggplot2)
 data("data_corpus_inaugural")
 
 ##########################
