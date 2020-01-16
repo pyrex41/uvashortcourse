@@ -6,11 +6,11 @@
 ### Setup R ###
 ###############
 
-### Clear terminal
-cat("\014")
-
 ### Clear space
 rm(list = ls())
+
+### Clear terminal
+cat("\014")
 
 ### Load library packages
 library(stm)
@@ -18,7 +18,9 @@ library(stm)
 # The data we'll be using for this unit consists of all world constitutions.
 
 # Load the data. Notice that we have the text of the articles in 'docs', along with some metadata in 'meta'.
-load("world-constitutions.RData")
+load("materials2/course/world-constitutions.RData")
+summary(df.world)
+summary(nchar(df.world$text))
 
 # STM has its own unique preprocessing functions and procedure, which I've coded below. Notice that we're going to use the `content` column, which contains all the text of the press releases.
 
@@ -49,7 +51,7 @@ plot(model)
 
 ### Hmm. A lot of really common words here. A lot of noise. Let's think about how to reduce that. One thing that we could do is remove the most common words in the corpus.
 # create corpus
-docs <- VCorpus(VectorSource(df.world$text))
+docs <- tm::VCorpus(VectorSource(df.world$text))
 docs
 # preprocess and create DTM
 dtm <- DocumentTermMatrix(docs,
@@ -78,7 +80,7 @@ docs <- out$documents
 vocab <- out$vocab
 meta <- out$meta
 
-model <- stm(docs, vocab, 8, prevalence = ~ year, data = meta, seed = 15)
+model <- stm(docs, vocab, 25, prevalence = ~ year, data = meta, seed = 15)
 plot(model)
 
 # Top Words
@@ -106,8 +108,8 @@ plot(model, type = "hist")
 # Corpus Summary
 plot.STM(model, type = "summary", main = "")
 # Estimate Covariate Effects
-prep <- estimateEffect(1:8 ~ year, model, meta = meta, uncertainty = "Global", documents=docs)
+prep <- estimateEffect(1:25 ~ year, model, meta = meta, uncertainty = "Global", documents=docs)
 summary(prep)
 
-plot(prep, covariate = "year", topics = 8)
-plot(prep, "year", method = "continuous", topics = 1:8)
+plot(prep, covariate = "year", topics = 25)
+plot(prep, "year", method = "continuous", topics = 1:25)
