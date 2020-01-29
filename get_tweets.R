@@ -15,7 +15,7 @@ token <- create_token(
   access_secret = "IXpGYVMxPEJvjPBTQMIi2YBMY6GXAbczPBxzYTntRQdaP")
 
 ## search query terms
-search_query = "shadowban lang:en"
+search_query = "shadow ban lang:en"
 # from date
 fd = "202001010000"
 # to date
@@ -24,6 +24,18 @@ td = "202001270000"
 env_name <- "dev"
 # where to save data; should create in working directory if doesn't exist
 safedir = 'twitter_data'
+
+rt.censor <- search_tweets(search_query,
+                           n=50000,
+                           parse = TRUE,
+                           safedir = safedir,
+                           token=token,
+                           retryonratelimit = TRUE)
+# remove retweets
+rt.censor[rt.censor$is_retweet == FALSE,] -> rt_filt
+
+saveRDS(rt_filt,paste(safedir,"/rt_filt_shadow_ban.rds",sep=''))
+saveRDS(rt.censor,paste(safedir,"/rt_shado_ban.rds",sep=''))
 
 # this works, and extracts the next_page token
 rt1 <- search_30day(
@@ -69,7 +81,7 @@ get_next_page <- function(x) {
 # my code now
 rt_combi <- rt1
 
-for (i in 1:2000) {
+for (i in 1:20) {
   np <- attr(rt_combi, 'next_page')[[1]]
   rt_new <- search_tweets(search_query,
                           fromDate = fd,
@@ -86,18 +98,24 @@ for (i in 1:2000) {
   Sys.sleep(2)
 }
 
-rt_combi <- search_tweets(search_query,
-                          n=18000,
-                          parse = TRUE,
-                          safedir = safedir,
-                          token=token)
-saveRDS(rt_combi,paste(safedir,"/rt_combi.rds",sep=''))
+rt_new <- search_tweets(search_query,
+                        fromDate = fd,
+                        toDate = td,
+                        premium = premium_api("30day", env_name),
+                        parse = TRUE, n = 100,
+                        safedir = safedir,
+                        token=token,
+                        'next'= np)
+
+
 
 rt_combi = readRDS("twitter_data/rt_combi.rds")
 
 min_id = rt_combi$status_id %>% min
 
 for (i in 1:5) {
+  print("sleeping for about 1 hour")
+  Sys.sleep(3600)
   r_new <- search_tweets(search_query,
                          n=18000,
                          parse = TRUE,

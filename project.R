@@ -4,7 +4,7 @@ rm(list = ls())
 ### Clear terminal
 cat("\014")
 
-rt_combi = readRDS("twitter_data/rt_combi.rds")
+rt_combi = readRDS("twitter_data/rt_filt.rds")
 
 library(tidyr)
 library(dplyr)
@@ -88,21 +88,6 @@ twitter.words.2 <- tcorp %>%
   coord_flip()
 twitter.words.2
 
-dtm <- DocumentTermMatrix(my_corpus,
-                          control = list(tolower = TRUE,
-                                         stopwords = TRUE,
-                                         removeNumbers = TRUE,
-                                         removePunctuation = TRUE,
-                                         stemming = TRUE))
-
-
-m <- as.matrix(dtm)
-v <- sort(colSums(m), decreasing = TRUE)
-custom.stop <- rownames(as.data.frame(head(v, 1000)))
-
-for (i in 1:length(df.world)) {
-  df.world$text[i] <- removeWords(df.world$text[i], custom.stop)
-}
 
 # not using this yet
 rt %>%

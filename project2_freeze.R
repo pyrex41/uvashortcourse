@@ -4,7 +4,7 @@ rm(list = ls())
 ### Clear terminal
 cat("\014")
 
-rt_combi = readRDS("twitter_data/rt_filt_censor.rds")
+rt_combi = readRDS("twitter_data/rt_filt_smcensor.rds")
 
 library(stm)
 
@@ -20,15 +20,15 @@ dtm <- DocumentTermMatrix(docs,
                                          stemming = TRUE))
 m <- as.matrix(dtm)
 v <- sort(colSums(m), decreasing = TRUE)
-custom.stop <- rownames(as.data.frame(head(v, 100)))
+custom.stop <- rownames(as.data.frame(head(v, 1000)))
 
 for (i in 1:length(rt_combi)) {
   rt_combi$text[i] <- removeWords(rt_combi$text[i], custom.stop)
 }
 
 temp <- textProcessor(documents = rt_combi$text, 
-                      metadata = rt_combi,
-                     customstopwords = custom.stop)
+                      metadata = rt_combi)
+#                      customstopwords = custom.stop)
 
 # pre-process
 meta <- temp$meta
@@ -43,13 +43,6 @@ meta <- out$meta
 # estimate w/ 3 topics
 model <- stm(docs, vocab, 3, data = meta, seed = 15)
 
-# estimate w/ 6 topics
-model <- stm(docs, vocab, 6, data = meta, seed = 15)
-
-# estimate w/ 4 topics
-model <- stm(docs, vocab, 4, data = meta, seed = 15)
-
-
 # plot model
 plot(model)
 
@@ -60,4 +53,4 @@ labelTopics(model)
 findThoughts(model, texts = meta$text, n = 1, topics = 1)
 
 # plot
-plot(model, type = "perspectives", topics = c(1,6)) # Topics #1 and #10
+plot(model, type = "perspectives", topics = c(2,3)) # Topics #1 and #10
